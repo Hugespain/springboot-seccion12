@@ -16,49 +16,90 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository repository;
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Product> findAll() {
-        return (List<Product>) repository.findAll();
-    }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<Product> findById(Long id) {
-        return repository.findById(id);
-    }
-
-    @Override
-    @Transactional
-    public Product save(Product product) {
-        return repository.save(product);
-    }
-
-    @Override
-    @Transactional
-    public Optional<Product> update(Long id, Product product) {
-        Optional<Product> productOptional = repository.findById(id);
-        if (productOptional.isPresent()) {
-            Product productDb = productOptional.orElseThrow();
-            
-            productDb.setName(product.getName());
-            productDb.setDescription(product.getDescription());
-            productDb.setPrice(product.getPrice());
-            return Optional.of(repository.save(productDb));
-            
-        }
-        return productOptional;
-    }
-
-    @Transactional
     @Override
     public Optional<Product> delete(Long id) {
-        Optional<Product> productOptional = repository.findById(id);
-        productOptional.ifPresent(productDb -> {
-            repository.delete(productDb);
-        });
-        return productOptional;
+       Optional<Product> optionalProduct = repository.findById(id);
+        if(optionalProduct.isPresent()){
+            repository.delete(optionalProduct.get());
+        }
+        return optionalProduct;
     }
+        
+       
+
+
+    @Override
+    public List<Product> findAll() {
+        return (List<Product>)repository.findAll(); //repository.findAll() devuelve un iterable, por eso hay que hacer un cast (List<Product>)
+    }
+
+    @Override
+    public Optional<Product> findById(Long id) {
+        // TODO Auto-generated method stub
+        return Optional.empty();
+    }
+
+    @Override
+    public Product save(Product product) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<Product> update(Long id, Product product) {
+        // TODO Auto-generated method stub
+        return Optional.empty();
+    }
+
+    // @Autowired
+    // private ProductRepository repository;
+
+    // @Transactional(readOnly = true)
+    // @Override
+    // public List<Product> findAll() {
+    //     return (List<Product>) repository.findAll();
+    // }
+
+    // @Override
+    // @Transactional(readOnly = true)
+    // public Optional<Product> findById(Long id) {
+    //     return repository.findById(id);
+    // }
+
+    // @Override
+    // @Transactional
+    // public Product save(Product product) {
+    //     return repository.save(product);
+    // }
+
+    // @Override
+    // @Transactional
+    // public Optional<Product> update(Long id, Product product) {
+    //     Optional<Product> productOptional = repository.findById(id);
+    //     if (productOptional.isPresent()) {
+    //         Product productDb = productOptional.orElseThrow();
+            
+    //         productDb.setName(product.getName());
+    //         productDb.setDescription(product.getDescription());
+    //         productDb.setPrice(product.getPrice());
+    //         return Optional.of(repository.save(productDb));
+            
+    //     }
+    //     return productOptional;
+    // }
+
+    // @Transactional
+    // @Override
+    // public Optional<Product> delete(Long id) {
+    //     Optional<Product> productOptional = repository.findById(id);
+    //     productOptional.ifPresent(productDb -> {
+    //         repository.delete(productDb);
+    //     });
+    //     return productOptional;
+    // }
+
+    
 
 
 }

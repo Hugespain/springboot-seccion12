@@ -5,15 +5,28 @@ import java.util.Optional;
 
 import com.andres.curso.springboot.app.springbootcrud.entities.Product;
 
-public interface ProductService {
+// public interface ProductService {
     
+//     List<Product> findAll();
+
+//     Optional<Product> findById(Long id);
+
+//     Product save(Product product);
+    
+//     Optional<Product> update(Long id, Product product);
+
+//     Optional<Product> delete(Long id);
+// }
+
+public interface ProductService{
     List<Product> findAll();
 
-    Optional<Product> findById(Long id);
+    Optional <Product> findById(Long id);
 
     Product save(Product product);
-    
-    Optional<Product> update(Long id, Product product);
+
+    Optional <Product> update(Long id, Product product);
 
     Optional<Product> delete(Long id);
+
 }
