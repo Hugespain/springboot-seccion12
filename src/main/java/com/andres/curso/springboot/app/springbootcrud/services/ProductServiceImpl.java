@@ -18,6 +18,41 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+    @Transactional (readOnly = true)
+    public List<Product> findAll() {
+        return (List<Product>)repository.findAll(); //repository.findAll() devuelve un iterable, por eso hay que hacer un cast (List<Product>)
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Product> findById(Long id) {
+       Optional<Product> productOptional= repository.findById(id);
+        return productOptional;
+    }
+
+    @Override
+    @Transactional
+    public Product save(Product product) {
+        return repository.save(product);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Product> update(Long id, Product product) {
+        Optional<Product> productOptional = repository.findById(id);
+        if(productOptional.isPresent()){
+            Product productDb = productOptional.orElseThrow();
+
+            productDb.setName(product.getName());
+            productDb.setPrice(product.getPrice());
+            productDb.setDescription(product.getDescription());
+        }
+        return Optional.empty();
+    }
+
+
+    @Override
+    @Transactional
     public Optional<Product> delete(Long id) {
        Optional<Product> optionalProduct = repository.findById(id);
         if(optionalProduct.isPresent()){
@@ -25,32 +60,7 @@ public class ProductServiceImpl implements ProductService {
         }
         return optionalProduct;
     }
-        
-       
 
-
-    @Override
-    public List<Product> findAll() {
-        return (List<Product>)repository.findAll(); //repository.findAll() devuelve un iterable, por eso hay que hacer un cast (List<Product>)
-    }
-
-    @Override
-    public Optional<Product> findById(Long id) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
-    }
-
-    @Override
-    public Product save(Product product) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Optional<Product> update(Long id, Product product) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
-    }
 
     // @Autowired
     // private ProductRepository repository;
