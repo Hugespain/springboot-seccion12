@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.andres.curso.springboot.app.springbootcrud.entities.Product;
 import com.andres.curso.springboot.app.springbootcrud.services.ProductService;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -49,7 +46,7 @@ public ResponseEntity<?> view(@PathVariable Long id) {
 //Método para añadir nuevo producto
 //Como es crear uno nuevo es la anotación post
 @PostMapping
-public ResponseEntity<Product> create(@RequestBody Product product){ //Voy a devolver una respuesta http completa incluyendo código de estado y cuerpo;donde va el objeto que se devuelve
+public ResponseEntity<Product> create(@RequestBody Product product){ //es necesario para que Spring convierta automáticamente el cuerpo de la solicitud (por ejemplo, un JSON) en un objeto Java(Product en este caso)
     return ResponseEntity.status(HttpStatus.CREATED).body(service.save(product));//Entidad Guardada: Devuelve la entidad con todos los cambios aplicados, incluyendo el ID si es nuevo.
     //Tipo de Retorno: La misma clase de la entidad que se guarda.
 }
@@ -66,10 +63,18 @@ public ResponseEntity<Product> update (@PathVariable Long id, @RequestBody Produ
    return ResponseEntity.notFound().build();
 
 }
+
+
+@PutMapping("/{id}")
+public ResponseEntity<Product> delete (@PathVariable Long id) { //Si no usamos aquí RequestBody es porque para eliminar un producto, solo necesitamos el id del producto a eliminar, que es parte de la URL, no del cuerpo de la solicitud.
+    Optional<Product> productOptional=service.delete(id);//Si el producto es encontrado y eliminado, se devuelve en el Optional; si no existe, devuelve Optional.empty()
+    if (productOptional.isPresent()) {
+        return ResponseEntity.ok(productOptional.get());//Este get puede sustituirse por un orElseThrow ya que nos permitiría obtener el valor presente en un Optional, o lanzar una excepción si el Optional está vacío
+    }
+    return ResponseEntity.notFound().build(); //Tengo que usar el build para construir una respuesta sin cuerpo, que es lo esperado cuando no encuentra el objeto, ya que en la respuesta http donde se almacena el objeto es en el cuerpo
 }
 
-
-
+}
 
 
 
