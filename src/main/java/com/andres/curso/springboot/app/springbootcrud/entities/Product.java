@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -57,15 +58,15 @@ public class Product{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message="{NotEmpty.product.name}") //Igualmente 3 espacios en blanco los aceptaría, por eso quizás es mejor usar NotBlank
     @Size(min=3,max=20)
     private String name;
 
-    @Min(500)
-    @NotNull
+    @Min(value=500, message="{Min.product.price}")
+    @NotNull(message = "{NotNull.product.price}")
     private Integer price;
 
-    @NotEmpty
+    @NotBlank
     private String description;
 
     

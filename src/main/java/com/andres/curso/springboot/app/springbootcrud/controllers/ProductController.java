@@ -75,7 +75,6 @@ public ResponseEntity<?> update ( @Valid @RequestBody Product product, BindingRe
                 return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.get());
             }
            return ResponseEntity.notFound().build();
-        
         }
         
         
